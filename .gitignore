@@ -3,3 +3,4 @@ token.json
 
 # Folders
 /env
+/cogs/__pycache__
