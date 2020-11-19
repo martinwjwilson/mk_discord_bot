@@ -1,6 +1,9 @@
 # Files
 token.json
 leaderboard.db
+sheets_credentials.json
+test.py
+
 
 # Folders
 /env
