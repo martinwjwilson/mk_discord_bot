@@ -33,11 +33,33 @@ class Fun(commands.Cog):
             current_row += 1
         return track_times_list
 
+    async def get_score_dictionary(self, rows, track_name):
+        """
+        Return a dictionary containing each player and their best time on the given track
+        """
+        # Check which column to take the times from based on the track name (either 1, 3, 5 or 7)
+        column_number = 0
+        for row in rows[0]:
+            if row == track_name:
+                break
+            column_number += 1
+        # loop through each row minus the first and last, and create a dictionary of players and scores from the correct column
+        track_score_dict = {}
+        stripped_data = rows[1:len(rows)-1]
+        for data in stripped_data:
+            track_score_dict[data[0]] = data[column_number]
+        return track_score_dict
+
+
     @commands.command()
     async def track(self, ctx, *, track_name: str):
+        """
+        Takes in a track name and returns a leaderboard for the chosen track
+        """
         # Retrieve the track data from the sheet
         sheet_data = worksheet.get_all_values()
-        await self.get_track_rows(sheet_data, track_name)
+        track_rows = await self.get_track_rows(sheet_data, track_name)
+        leaderboard_dictionary = await self.get_score_dictionary(track_rows, track_name)
         # Create a dictionary of users and their scores for the specific track
         # Create an instance of a track using a dictionary of users and scores
 
