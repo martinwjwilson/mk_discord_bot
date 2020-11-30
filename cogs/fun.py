@@ -14,6 +14,8 @@ class Fun(commands.Cog):
     # @commands.has_role(config.role_dict.get("admin"))
     async def ping(self, ctx):
         await ctx.send(f'pong')
+        time = "2:05.384".replace(".", ":").split(":")
+        print(time)
 
     async def get_track_rows(self, sheet_data, track_name):
         """
@@ -50,6 +52,23 @@ class Fun(commands.Cog):
             track_score_dict[data[0]] = data[column_number]
         return track_score_dict
 
+    async def sort_track_times(self, leaderboard_dictionary):
+        """
+        Sort a dictionary of users and scores from fastest to slowest
+        """
+        sorted_list = []
+        # loop through the dictionary, first
+        # format is m:ss:iii
+        # convert the score to a time and sort by smallest
+        print(leaderboard_dictionary)
+        for player in leaderboard_dictionary:
+            # get the player time
+            time = leaderboard_dictionary[player].replace(".", ":").split(":")
+            min = time[0]
+            sec = time[1]
+            ms = time[2]
+
+            print(f"{player} score before conversion is {leaderboard_dictionary[player]} and the score after conversion: min={min}, sec={sec}, ms={ms}")
 
     @commands.command()
     async def track(self, ctx, *, track_name: str):
@@ -60,9 +79,8 @@ class Fun(commands.Cog):
         sheet_data = worksheet.get_all_values()
         track_rows = await self.get_track_rows(sheet_data, track_name)
         leaderboard_dictionary = await self.get_score_dictionary(track_rows, track_name)
-        # Create a dictionary of users and their scores for the specific track
-        # Create an instance of a track using a dictionary of users and scores
-
+        sorted_time_list = await self.sort_track_times(leaderboard_dictionary)
+        # Send an embed to the discord channel with the leaderboard
 
 def setup(bot):
     bot.add_cog(Fun(bot))
