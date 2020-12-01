@@ -60,15 +60,22 @@ class Fun(commands.Cog):
         # loop through the dictionary, first
         # format is m:ss:iii
         # convert the score to a time and sort by smallest
-        print(leaderboard_dictionary)
+        fastest_player = None
+        print(f"The current fastest player is {fastest_player}")
         for player in leaderboard_dictionary:
             # get the player time
             time = leaderboard_dictionary[player].replace(".", ":").split(":")
-            min = time[0]
-            sec = time[1]
-            ms = time[2]
+            min = int(time[0])
+            sec = int(time[1])
+            ms = int(time[2])
+            # check if there is a current fastest player
+            if not fastest_player: # assign the first player as the fastest
+                print("There is no one")
+                fastest_player = player
+            else: # check the current player against the fastest
+                print("There is someone")
 
-            print(f"{player} score before conversion is {leaderboard_dictionary[player]} and the score after conversion: min={min}, sec={sec}, ms={ms}")
+            print(f"{player} score before conversion is {leaderboard_dictionary[player]} and the score after conversion: min={str(min)}, sec={str(sec)}, ms={str(ms)}")
 
     @commands.command()
     async def track(self, ctx, *, track_name: str):
