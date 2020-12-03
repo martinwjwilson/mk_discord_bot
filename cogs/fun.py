@@ -72,6 +72,19 @@ class Fun(commands.Cog):
                 fastest_player = Player(player, min, sec, ms)
             else: # check the current player against the fastest
                 print(f"The current fastest player is {fastest_player.get_name()} with {fastest_player.get_minutes()}m {fastest_player.get_seconds()}s {fastest_player.get_milliseconds()}ms and the comparison is{min}m {sec}s {ms}ms")
+                if(min < fastest_player.get_minutes()): # if the minutes are lower
+                    print("The minutes are lower")
+                    fastest_player = Player(player, min, sec, ms)
+                elif(min == fastest_player.get_minutes()): # if the minutes are the same then check the seconds
+                    if(sec < fastest_player.get_seconds()): # if the seconds are lower
+                        print("The seconds are lower")
+                        fastest_player = Player(player, min, sec, ms)
+                    elif(sec == fastest_player.get_seconds()): # if the seconds are the same then check the milliseconds
+                        if(ms < fastest_player.get_milliseconds()): # if the milliseconds are lower
+                            print("The milliseconds are lower")
+                            fastest_player = Player(player, min, sec, ms)
+                        elif(ms == fastest_player.get_milliseconds()):
+                            print("There is a draw for first place")
 
             print(f"The current fastest player is {fastest_player.get_name()}")
 
