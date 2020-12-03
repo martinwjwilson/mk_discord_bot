@@ -13,9 +13,8 @@ class Fun(commands.Cog):
     @commands.command()
     # @commands.has_role(config.role_dict.get("admin"))
     async def ping(self, ctx):
-        await ctx.send(f'pong')
-        time = "2:05.384".replace(".", ":").split(":")
-        print(time)
+        testing = Player("Martin", 1, 10, 100)
+        await ctx.send(testing.get_name())
 
     async def get_track_rows(self, sheet_data, track_name):
         """
@@ -70,10 +69,10 @@ class Fun(commands.Cog):
             ms = int(time[2])
             # check if there is a current fastest player
             if not fastest_player: # assign the first player as the fastest
-                print("There is no one")
                 fastest_player = player
             else: # check the current player against the fastest
                 print("There is someone")
+                # print(f"The current fastest time is {}m {}s {}ms and the comparison is{}m {}s {}ms")
 
             print(f"{player} score before conversion is {leaderboard_dictionary[player]} and the score after conversion: min={str(min)}, sec={str(sec)}, ms={str(ms)}")
 
@@ -88,6 +87,25 @@ class Fun(commands.Cog):
         leaderboard_dictionary = await self.get_score_dictionary(track_rows, track_name)
         sorted_time_list = await self.sort_track_times(leaderboard_dictionary)
         # Send an embed to the discord channel with the leaderboard
+
+class Player():
+    def __init__(self, name, min, sec, ms):
+        self.name = name
+        self.min = min
+        self.sec = sec
+        self.ms = ms
+
+    def get_name(self):
+        return self.name
+
+    def get_minutes(self):
+        return self.min
+
+    def get_seconds(self):
+        return self.seconds
+
+    def get_milliseconds(self):
+        return self.ms
 
 def setup(bot):
     bot.add_cog(Fun(bot))
