@@ -69,12 +69,13 @@ class Fun(commands.Cog):
             ms = int(time[2])
             # check if there is a current fastest player
             if not fastest_player: # assign the first player as the fastest
-                fastest_player = player
+                fastest_player = Player(player, min, sec, ms)
             else: # check the current player against the fastest
-                print("There is someone")
-                # print(f"The current fastest time is {}m {}s {}ms and the comparison is{}m {}s {}ms")
+                print(f"The current fastest player is {fastest_player.get_name()} with {fastest_player.get_minutes()}m {fastest_player.get_seconds()}s {fastest_player.get_milliseconds()}ms and the comparison is{min}m {sec}s {ms}ms")
 
-            print(f"{player} score before conversion is {leaderboard_dictionary[player]} and the score after conversion: min={str(min)}, sec={str(sec)}, ms={str(ms)}")
+            print(f"The current fastest player is {fastest_player.get_name()}")
+
+            # print(f"{player} score before conversion is {leaderboard_dictionary[player]} and the score after conversion: min={str(min)}, sec={str(sec)}, ms={str(ms)}")
 
     @commands.command()
     async def track(self, ctx, *, track_name: str):
@@ -102,7 +103,7 @@ class Player():
         return self.min
 
     def get_seconds(self):
-        return self.seconds
+        return self.sec
 
     def get_milliseconds(self):
         return self.ms
