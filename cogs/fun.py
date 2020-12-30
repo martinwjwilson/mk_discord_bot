@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import gspread
+from player import Player
 
 gc = gspread.service_account(filename='sheets_credentials.json')
 sh = gc.open_by_key('15iLeVfNwbXgy4h8SvZr00y6viT7bH95VLbN32JKFOKI')
