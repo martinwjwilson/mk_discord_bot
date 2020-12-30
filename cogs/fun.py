@@ -73,48 +73,17 @@ class Fun(commands.Cog):
                 player_list.append(player_to_insert)
         return player_list
 
-    async def sort_track_times(self, leaderboard_dictionary):
-        """
-        Sort a dictionary of users and scores from fastest to slowest
-        """
-        return
-        # NEW WAY
-        # https://stackoverflow.com/questions/403421/how-to-sort-a-list-of-objects-based-on-an-attribute-of-the-objects
+    # async def sorter(player):
+    #     minutes = player.min
+    #     seconds = player.sec
+    #     milliseconds = player.ms
+    #     return(minutes, seconds, milliseconds)
 
-        # OLD WAY
-        # player_list = [] # create a list of players to return
-        # for player in leaderboard_dictionary:
-        #     if(leaderboard_dictionary[player] != ''): # check the player has a recorded time for the current track
-        #         # get the player time
-        #         # format of player times = m:ss:iii
-        #         time = leaderboard_dictionary[player].replace(".", ":").split(":")
-        #         min = int(time[0])
-        #         sec = int(time[1])
-        #         ms = int(time[2])
-        #         # create a player instance to store in list (keeps order)
-        #         player_to_insert = Player(player, min, sec, ms)
-        #         # check where to insert new player in player_list
-        #         if not player_list: # if player_list is empty then insert name
-        #             player_list.append(player_to_insert)
-        #         else: # check through the list and insert new player in appropriate place
-        #             n = 0
-        #             inserted = False
-        #             while n < len(player_list) and inserted == False:
-        #                 # create an instance of the comparison player
-        #                 comparison_player = player_list[n]
-        #                 print(f"{player_to_insert.name()}: {player_to_insert.min()} COMPARED TO {comparison_player.name()}: {comparison_player.min()}")
-        #                 if player_to_insert.min() >= comparison_player.min():
-        #                     player_list.insert(n, player_to_insert)
-        #                     inserted = True
-        #                 elif player_to_insert.sec() >= comparison_player.sec():
-        #                     player_list.insert(n, player_to_insert)
-        #                     inserted = True
-        #                 elif player_to_insert.ms() >= comparison_player.ms():
-        #                     player_list.insert(n, player_to_insert)
-        #                     inserted = True
-        #                 n += 1
-        # for player in player_list:
-        #     print(player.name())
+    async def sort_leaderboard(self, unsorted_leaderboard_list: list) -> list:
+        """
+        Sort a list of player objects from fastest to slowest
+        """
+        return(sorted(unsorted_leaderboard_list, key=lambda player: (player.min, player.sec, player.ms)))
 
     async def get_leaderboard(self, sheet_data, track_name: str) -> list:
         """
