@@ -28,6 +28,7 @@ class Fun(commands.Cog):
         for row in sheet_data:
             if required and row[0] == '':
                 required = False
+                break
             if track_name in row:
                 required = True
             if required:
