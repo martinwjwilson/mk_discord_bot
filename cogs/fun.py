@@ -19,7 +19,7 @@ class Fun(commands.Cog):
         x = lambda a : a + 10
         await ctx.send(x(num))
 
-    async def get_track_rows(self, sheet_data, track_name):
+    async def get_track_rows(self, sheet_data, track_name: str) -> list:
         """
         Returns a list of rows containing records of the requested track
         """
@@ -38,9 +38,9 @@ class Fun(commands.Cog):
             current_row += 1
         return track_times_list
 
-    async def get_track_times(self, rows, track_name):
+    async def get_track_times(self, rows: list, track_name: str) -> dict:
         """
-        Return a list of players and their best time on the chosen track
+        Return a dictinoary of players and their best time on the chosen track
         """
         # Check which column to take the times from based on the track name (either 1, 3, 5 or 7)
         column_number = 0
@@ -52,21 +52,32 @@ class Fun(commands.Cog):
         track_score_dict = {}
         stripped_data = rows[1:len(rows)-1]
         for data in stripped_data:
-            print(data)
             track_score_dict[data[0]] = data[column_number]
         return track_score_dict
 
-    # async def get_score_dictionary(self, rows, track_name):
-    #     """
-    #     Return a dictionary containing each player and their best time on the chosen track
-    #     """
-    #     return
-    #
-    # async def sort_track_times(self, leaderboard_dictionary):
-    #     """
-    #     Sort a dictionary of users and scores from fastest to slowest
-    #     """
-    #     return
+    async def track_time_conversion(self, track_time_dict):
+        """
+        Convert a dictionary of players and their times into a list of player objects
+        """
+        player_list = [] # create a list of players to return
+        for player in track_time_dict:
+            if(track_time_dict[player] != ''): # check the player has a recorded time for the current track
+                # get the player time
+                # format of player times = m:ss:iii
+                time = track_time_dict[player].replace(".", ":").split(":")
+                min = int(time[0])
+                sec = int(time[1])
+                ms = int(time[2])
+                # create a player instance to store in list (keeps order)
+                player_to_insert = Player(player, min, sec, ms)
+                player_list.append(player_to_insert)
+        return player_list
+
+    async def sort_track_times(self, leaderboard_dictionary):
+        """
+        Sort a dictionary of users and scores from fastest to slowest
+        """
+        return
         # NEW WAY
         # https://stackoverflow.com/questions/403421/how-to-sort-a-list-of-objects-based-on-an-attribute-of-the-objects
 
@@ -105,19 +116,23 @@ class Fun(commands.Cog):
         # for player in player_list:
         #     print(player.name())
 
+    async def get_leaderboard(self, sheet_data, track_name):
+        """
+        Return a sorted list of player objects in from fastest to slowest
+        """
+        track_rows = await self.get_track_rows(sheet_data, track_name) # get a list of rows containing the track data
+        track_times = await self.get_track_times(track_rows, track_name) # get a dictionary of players and their scores from the requested track
+        unsorted_leaderboard_list = await self.track_time_conversion(track_times) # convert the player dictionary into a list of player objects
+        # sort the list of player objects in order of fastest to slowest
+        # return the final list
+
     @commands.command()
     async def track(self, ctx, *, track_name: str):
         """
         Takes in a track name and returns a leaderboard for the chosen track
         """
-        # Retrieve the track data from the sheet
-        sheet_data = worksheet.get_all_values()
-        track_rows = await self.get_track_rows(sheet_data, track_name)
-        track_times = await self.get_track_times(track_rows, track_name)
-        # leaderboard_dictionary = await self.get_score_dictionary(track_rows, track_name)
-        print(track_times)
-        # print(leaderboard_dictionary)
-        # sorted_time_list = await self.sort_track_times(leaderboard_dictionary)
+        sheet_data = worksheet.get_all_values() # Retrieve the track data from the sheet
+        leaderboard_dictionary = await self.get_leaderboard(sheet_data, track_name) # Get a list of all players and their times on the requested track
         # Send an embed to the discord channel with the leaderboard
 
 def setup(bot):
