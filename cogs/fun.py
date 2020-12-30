@@ -55,7 +55,7 @@ class Fun(commands.Cog):
             track_score_dict[data[0]] = data[column_number]
         return track_score_dict
 
-    async def track_time_conversion(self, track_time_dict):
+    async def track_time_conversion(self, track_time_dict: dict) -> list:
         """
         Convert a dictionary of players and their times into a list of player objects
         """
@@ -116,14 +116,14 @@ class Fun(commands.Cog):
         # for player in player_list:
         #     print(player.name())
 
-    async def get_leaderboard(self, sheet_data, track_name):
+    async def get_leaderboard(self, sheet_data, track_name: str) -> list:
         """
         Return a sorted list of player objects in from fastest to slowest
         """
         track_rows = await self.get_track_rows(sheet_data, track_name) # get a list of rows containing the track data
         track_times = await self.get_track_times(track_rows, track_name) # get a dictionary of players and their scores from the requested track
         unsorted_leaderboard_list = await self.track_time_conversion(track_times) # convert the player dictionary into a list of player objects
-        # sort the list of player objects in order of fastest to slowest
+        sorted_leaderboard_list = await self.sort_leaderboard(unsorted_leaderboard_list) # sort the list of player objects in order of fastest to slowest
         # return the final list
 
     @commands.command()
