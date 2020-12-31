@@ -95,9 +95,18 @@ class Track(commands.Cog):
         Takes in a track name and returns a leaderboard for the chosen track
         """
         sheet_data = worksheet.get_all_values() # Retrieve the track data from the sheet
-        leaderboard_dictionary = await self.get_leaderboard(sheet_data, track_name) # Get a list of all players and their times on the requested track
+        leaderboard_list = await self.get_leaderboard(sheet_data, track_name) # Get a list of all players and their times on the requested track
         # Send an embed to the discord channel with the leaderboard
-        embed = discord.Embed(title = "Title", info = "Information")
+        # check how many entries are in the list
+        if len(leaderboard_list) > 0:
+            embed = discord.Embed(title = f"Leaderboard - {track_name}", description = "The top 3 fastest time are:")
+            embed.add_field(name="First", value=f"{leaderboard_list[0].name}: {leaderboard_list[0].min}.{leaderboard_list[0].sec}.{leaderboard_list[0].ms}", inline=False)
+            if len(leaderboard_list) > 1:
+                embed.add_field(name="Second", value=f"{leaderboard_list[1].name}: {leaderboard_list[1].min}.{leaderboard_list[1].sec}.{leaderboard_list[1].ms}", inline=False)
+                if len(leaderboard_list) > 2:
+                    embed.add_field(name="Third", value=f"{leaderboard_list[2].name}: {leaderboard_list[2].min}.{leaderboard_list[2].sec}.{leaderboard_list[2].ms}", inline=False)
+        else:
+            await ctx.send("There are no entries for this track")
         await ctx.send(embed = embed)
 
 def setup(bot):
