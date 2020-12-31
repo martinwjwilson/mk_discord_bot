@@ -5,7 +5,7 @@ from player import Player
 
 gc = gspread.service_account(filename='sheets_credentials.json')
 sh = gc.open_by_key('15iLeVfNwbXgy4h8SvZr00y6viT7bH95VLbN32JKFOKI')
-worksheet = sh.sheet1
+worksheet_names = ["New Tracks", "Retro Tracks", "DLC Tracks"]
 
 class Track(commands.Cog):
     def __init__(self, bot):
@@ -22,21 +22,26 @@ class Track(commands.Cog):
     async def get_track_rows(self, sheet_data, track_name: str) -> list:
         """
         Returns a list of rows containing records of the requested track
+        Search all 3 sheets
         """
-        required = False # are the current rows required
-        current_row = 1 # track the number of the current row
         track_times_list = []
-        # loop through each row and return the details of the requested track
-        for row in sheet_data:
-            if required and row[0] == '':
-                required = False
-                break
-            if track_name in row:
-                required = True
-            if required:
-                track_times_list.append(row)
-            current_row += 1
-        return track_times_list
+        for sheet in sheet_data:
+            required = False # are the current rows required
+            current_row = 1 # track the number of the current row
+            # loop through each row and return the details of the requested track
+            for row in sheet:
+                if required and row[0] == '':
+                    required = False
+                    break
+                if track_name in row:
+                    required = True
+                if required:
+                    track_times_list.append(row)
+                current_row += 1
+        if track_times_list:
+            return track_times_list
+        else:
+            print("There is no track with this name")
 
     async def get_track_times(self, rows: list, track_name: str) -> dict:
         """
@@ -94,8 +99,13 @@ class Track(commands.Cog):
         """
         Takes in a track name and returns a leaderboard for the chosen track
         """
-        sheet_data = worksheet.get_all_values() # Retrieve the track data from the sheet
-        leaderboard_list = await self.get_leaderboard(sheet_data, track_name) # Get a list of all players and their times on the requested track
+        # Get a list of all the data from each sheet
+        list_of_worksheet_data = []
+        for sheet in worksheet_names:
+            worksheet = sh.worksheet(sheet)
+            sheet_data = worksheet.get_all_values()
+            list_of_worksheet_data.append(sheet_data)
+        leaderboard_list = await self.get_leaderboard(list_of_worksheet_data, track_name) # Get a list of all players and their times on the requested track
         # Send an embed to the discord channel with the leaderboard
         # check how many entries are in the list
         if len(leaderboard_list) > 0:
