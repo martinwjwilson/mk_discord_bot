@@ -7,7 +7,7 @@ gc = gspread.service_account(filename='sheets_credentials.json')
 sh = gc.open_by_key('15iLeVfNwbXgy4h8SvZr00y6viT7bH95VLbN32JKFOKI')
 worksheet = sh.sheet1
 
-class Fun(commands.Cog):
+class Track(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -73,12 +73,6 @@ class Fun(commands.Cog):
                 player_list.append(player_to_insert)
         return player_list
 
-    # async def sorter(player):
-    #     minutes = player.min
-    #     seconds = player.sec
-    #     milliseconds = player.ms
-    #     return(minutes, seconds, milliseconds)
-
     async def sort_leaderboard(self, unsorted_leaderboard_list: list) -> list:
         """
         Sort a list of player objects from fastest to slowest
@@ -93,7 +87,7 @@ class Fun(commands.Cog):
         track_times = await self.get_track_times(track_rows, track_name) # get a dictionary of players and their scores from the requested track
         unsorted_leaderboard_list = await self.track_time_conversion(track_times) # convert the player dictionary into a list of player objects
         sorted_leaderboard_list = await self.sort_leaderboard(unsorted_leaderboard_list) # sort the list of player objects in order of fastest to slowest
-        # return the final list
+        return sorted_leaderboard_list # return the final list
 
     @commands.command()
     async def track(self, ctx, *, track_name: str):
@@ -103,21 +97,8 @@ class Fun(commands.Cog):
         sheet_data = worksheet.get_all_values() # Retrieve the track data from the sheet
         leaderboard_dictionary = await self.get_leaderboard(sheet_data, track_name) # Get a list of all players and their times on the requested track
         # Send an embed to the discord channel with the leaderboard
+        embed = discord.Embed(title = "Title", info = "Information")
+        await ctx.send(embed = embed)
 
 def setup(bot):
-    bot.add_cog(Fun(bot))
-
-# --GET THE FASTEST PLAYER FROM A LIST--
-# # check if there is a current fastest player
-# if not fastest_player: # assign the first player as the fastest
-#     fastest_player = Player(player, min, sec, ms)
-# else: # check the current player against the fastest
-#     if(min < fastest_player.min()): # if the minutes are lower
-#         fastest_player = Player(player, min, sec, ms)
-#     elif(min == fastest_player.min()): # if the minutes are the same then check the seconds
-#         if(sec < fastest_player.sec()): # if the seconds are lower
-#             fastest_player = Player(player, min, sec, ms)
-#         elif(sec == fastest_player.sec()): # if the seconds are the same then check the milliseconds
-#             if(ms < fastest_player.ms()): # if the milliseconds are lower
-#                 fastest_player = Player(player, min, sec, ms)
-#             elif(ms == fastest_player.ms()):
+    bot.add_cog(Track(bot))
