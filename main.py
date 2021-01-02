@@ -7,7 +7,7 @@ with open("token.json", 'r') as f:
     token = json.load(f)['TOKEN']
 
 bot = commands.Bot(command_prefix = ">")
-extensions = ["fun"] # list of cogs to call
+extensions = ["track"] # list of cogs to call
 
 @bot.event
 async def on_ready():
