@@ -6,7 +6,7 @@ import json
 with open("token.json", 'r') as f:
     token = json.load(f)['TOKEN']
 
-bot = commands.Bot(command_prefix = ">")
+bot = commands.Bot(command_prefix = ">", help_command=None)
 extensions = ["track"] # list of cogs to call
 
 @bot.event

@@ -11,7 +11,7 @@ class Track(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(help = "This is the longer description of the help for this command", brief = "This is the brief text description")
     # @commands.has_role(config.role_dict.get("admin"))
     async def ping(self, ctx, num: int):
         # testing = Player("Martin", 1, 10, 100)
