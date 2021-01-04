@@ -86,7 +86,11 @@ class Track(commands.Cog):
         sorted_leaderboard_list = await self.sort_leaderboard(unsorted_leaderboard_list) # sort the list of player objects in order of fastest to slowest
         return sorted_leaderboard_list # return the final list
 
-    @commands.command()
+    @commands.command(
+        name = "track",
+        description = "Get leaderboard of a track",
+        usage = "<text>"
+    )
     async def track(self, ctx, *, track_name: str):
         """
         Takes in a track name and returns a leaderboard for the chosen track
