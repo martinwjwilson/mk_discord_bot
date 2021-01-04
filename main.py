@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-# import config
 import json
 
 with open("token.json", 'r') as f:
