@@ -11,14 +11,6 @@ class Track(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    # @commands.has_role(config.role_dict.get("admin"))
-    async def ping(self, ctx, num: int):
-        # testing = Player("Martin", 1, 10, 100)
-        # await ctx.send(testing.name)
-        x = lambda a : a + 10
-        await ctx.send(x(num))
-
     async def get_track_rows(self, sheet_data, track_name: str) -> list:
         """
         Returns a list of rows containing records of the requested track
@@ -94,7 +86,11 @@ class Track(commands.Cog):
         sorted_leaderboard_list = await self.sort_leaderboard(unsorted_leaderboard_list) # sort the list of player objects in order of fastest to slowest
         return sorted_leaderboard_list # return the final list
 
-    @commands.command()
+    @commands.command(
+        name = "track",
+        description = "Get leaderboard of a track",
+        usage = "<text>"
+    )
     async def track(self, ctx, *, track_name: str):
         """
         Takes in a track name and returns a leaderboard for the chosen track
