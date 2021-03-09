@@ -5,8 +5,9 @@ import json
 with open("token.json", 'r') as f:
     token = json.load(f)['TOKEN']
 
-bot = commands.Bot(command_prefix = ">", help_command=None)
-extensions = ["general", "track"] # list of cogs to call
+bot = commands.Bot(command_prefix=">", help_command=None)
+extensions = ["general", "track"]  # list of cogs to call
+
 
 @bot.event
 async def on_ready():
@@ -14,14 +15,16 @@ async def on_ready():
     print(discord.__version__)
     print("Ready...")
 
+
 # immediately stop the bot
-@bot.command(hidden = True)
+@bot.command(hidden=True)
 # @commands.has_role(config.role_dict.get("red_panda"))
 async def stop(ctx):
     await bot.logout()
 
+
 # manually load a cog
-@bot.command(hidden = True)
+@bot.command(hidden=True)
 # @commands.has_role(config.role_dict.get("red_panda"))
 async def load(ctx, extension):
     try:
@@ -30,8 +33,9 @@ async def load(ctx, extension):
     except Exception as error:
         print(f"{extension} could not be loaded. [{error}]")
 
+
 # manually unload a cog
-@bot.command(hidden = True)
+@bot.command(hidden=True)
 # @commands.has_role(config.role_dict.get("red_panda"))
 async def unload(ctx, extension):
     try:
@@ -40,8 +44,9 @@ async def unload(ctx, extension):
     except Exception as error:
         print(f"{extension} could not be unloaded. [{error}]")
 
+
 # manually reload a cog
-@bot.command(hidden = True)
+@bot.command(hidden=True)
 # @commands.has_role(config.role_dict.get("red_panda"))
 async def reload(ctx, extension):
     try:
@@ -49,6 +54,7 @@ async def reload(ctx, extension):
         print(f"Reloaded {extension}.\n")
     except Exception as error:
         print(f"{extension} could not be reloaded. [{error}]")
+
 
 if __name__ == '__main__':
     for extension in extensions:
