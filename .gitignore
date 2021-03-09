@@ -7,4 +7,5 @@ test.py
 
 # Folders
 /env
+/.idea
 __pycache__
